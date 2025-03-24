@@ -1,28 +1,104 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Luke Johnson</title>
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <style>
+      @font-face {
+        font-family: 'TX-02';
+        font-style: normal;
+        font-weight: 400;
+        src: url('TX-02-Regular.woff2') format('woff2');
+      }
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Luke Johnson</title>
-  <meta name="description" content="A software engineer and occasional designer living in Greenville, SC" />
-  <link rel="icon" type="image/png" href="favicon.png" />
-  <link rel="stylesheet" href="/styles.css" />
-</head>
+      * {
+        margin: 0;
+        box-sizing: border-box;
+      }
 
-<body>
-  <main>
-    <p>
-      Hi, I’m Luke. I'm a software engineer and occasional designer living in
-      Greenville, SC. I'm currently working with the Content Platforms team at
-      <a href="https://zapier.com" target="_blank" rel="noopener">Zapier</a>.
-    </p>
-    <nav>
-      <a href="mailto:me@lukecjohnson.com">Email</a>
-      <a href="https://github.com/lukecjohnson" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://www.linkedin.com/in/lukecjohnson" target="_blank" rel="noopener">LinkedIn</a>
-    </nav>
-  </main>
-</body>
+      html, body {
+        height: 100%;
+      }
 
+      body {
+        display: grid;
+        grid-template-rows: 1fr auto;
+        padding: 48px;
+        font-family: "TX-02", monospace;
+        font-size: 16px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #000000;
+        background-color: #FFFFFF;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      a:hover {
+        color: #FFFFFF;
+        background-color: #000000;
+      }
+
+      h1 {
+        font-size: inherit;
+        font-weight: 400;
+      }
+
+      section + section {
+        margin-top: 24px;
+      }
+
+      @media (width <= 640px) {
+        body {
+          padding: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>Luke Johnson</h1>
+        <div>Software engineer</div>
+      </section>
+      <section>
+        <div>
+          <a href="https://zapier.com" target="_blank" rel="noopener">Zapier</a>
+          <span>2021 → Now</span>
+        </div>
+        <div>
+          <a href="https://epandco.com" target="_blank" rel="noopener">EP+Co</a>
+          <span>2019 → 2021</span>
+        </div>
+      </section>
+      <section>
+        <div><a href="mailto:me@lukecjohnson.com">Email</a></div>
+        <div><a href="https://github.com/lukecjohnson" target="_blank" rel="noopener">GitHub</a></div>
+        <div><a href="https://www.linkedin.com/in/lukecjohnson" target="_blank" rel="noopener">LinkedIn</a></div>
+      </section>
+    </main>
+    <footer>
+      <div>Greenville, SC</div>
+      <time>00:00:00</time>
+    </footer>
+    <script>
+      function setTime() {
+        const time = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/New_York',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        }).format(new Date())
+        document.querySelector('time').innerText = time;
+      }
+      setTime();
+      setInterval(setTime, 1000);
+    </script>
+  </body>
 </html>
