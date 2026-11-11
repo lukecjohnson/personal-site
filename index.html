@@ -3,81 +3,201 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Software engineer and occasional designer, currently leading the Web Foundations team at Zapier"
+    />
     <title>Luke Johnson</title>
-    <meta name="description" content="A software engineer and occasional designer currently working at Zapier" />
-    <link rel="icon" type="image/png" href="favicon.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/assets/favicon-light.png"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/assets/favicon-dark.png"
+      media="(prefers-color-scheme: dark)"
+    />
     <style>
-      * {
-        margin: 0;
+      @font-face {
+        font-family: "Berkeley Mono";
+        font-style: normal;
+        font-weight: 400;
+        src: url("/assets/berkeley-mono.woff2") format("woff2");
       }
 
       body {
-        padding: 80px 64px;
+        margin: 0;
+        padding: 48px;
         background-color: #fafafa;
-        color: #1a1a1a;
-        font-family: 'Palatino', 'Garamond', serif;
-        font-size: 16px;
-        line-height: 1.6;
-        letter-spacing: -0.1px;
+        color: #202020;
+        font:
+          400 14px/1.6 "Berkeley Mono",
+          monospace;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
 
+      #plasma {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        margin: 0;
+        overflow: hidden;
+        color: #cccccc;
+        font-family: inherit;
+        line-height: 1.2;
+        pointer-events: none;
+        user-select: none;
+      }
+
       main {
-        max-width: 64ch;
-        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        max-width: 40ch;
       }
 
-      main * + * {
-        margin-top: 1em;
+      h1 {
+        margin: 0;
+        font: inherit;
       }
 
-      ul {
-        list-style: none;
-        padding: 0;
-      }
-
-      li + li {
-        margin-top: 0.25em;
+      p {
+        margin: 1.5em 0;
       }
 
       a {
         color: inherit;
-        text-decoration-style: dotted;
-        text-decoration-thickness: 1px;
+        text-decoration: underline dotted 1px;
         text-underline-offset: 2px;
       }
 
-      @media (hover: hover) {
-        a:hover {
-          text-decoration-style: solid;
-        }
+      a:hover {
+        text-decoration-style: solid;
       }
 
-      @media (max-width: 640px) {
+      @media (width < 640px) {
         body {
-          padding: 32px;
+          padding: 16px;
+        }
+
+        #plasma {
+          font-size: 8px;
         }
       }
     </style>
   </head>
   <body>
+    <pre id="plasma" aria-hidden="true"></pre>
     <main>
-      <p>Hi, I'm Luke &mdash; a software engineer and occasional designer.</p>
+      <h1>Luke Johnson &mdash; software engineer and occasional designer.</h1>
       <p>
-        I'm currently working at <a href="https://zapier.com" target="_blank" rel="noopener">Zapier</a>,
-        leading the development of UI libraries and thoughtfully-crafted web experiences.
+        Currently leading the Web Foundations team at
+        <a href="https://zapier.com" target="_blank" rel="noopener">Zapier</a>.
       </p>
       <p>
-        Previously, I built apps and websites for clients like Verizon and ESPN while working at
+        Previously built apps and websites for Verizon, ESPN, and others at
         <a href="https://www.epandco.com" target="_blank" rel="noopener">EP+Co</a>.
       </p>
-      <p>I live in Greenville, South Carolina with my wife and one-year-old son.</p>
-      <ul>
-        <li><a href="mailto:luke@lukecjohnson.com">Email</a></li>
-        <li><a href="https://www.linkedin.com/in/lukecjohnson" target="_blank" rel="noopener">LinkedIn</a></li>
-        <li><a href="https://github.com/lukecjohnson" target="_blank" rel="noopener">GitHub</a></li>
-      </ul>
+      <p>Say hello at <a href="#">luke@lukecjohnson.com</a>.</p>
     </main>
+    <script type="module">
+      const { sin, cos, hypot, min, max } = Math;
+      const el = document.getElementById("plasma");
+      const main = document.querySelector("main");
+      const ramp = " .,:;-=+*#%@";
+      let cols, rows, aspect, cw, ch, fadeX, fadeY;
+      let last = 0;
+      let frame = 0;
+      const cursor = {
+        tx: 0,
+        ty: 0,
+        x: 0,
+        y: 0,
+        pull: 0,
+        moved: -Infinity
+      };
+
+      addEventListener("pointermove", (e) => {
+        cursor.tx = e.clientX;
+        cursor.ty = e.clientY;
+        cursor.moved = performance.now();
+      });
+
+      const smoothstep = (a, b, v) => {
+        const k = min(1, max(0, (v - a) / (b - a)));
+        return k * k * (3 - 2 * k);
+      };
+
+      const lerp = (a, b, k) => a + (b - a) * k;
+
+      function render(t) {
+        const h = rows * aspect;
+        const { x: mx, y: my, pull } = cursor;
+        const ax = cols * (0.5 + 0.35 * sin(t * 0.31));
+        const ay = h * (0.5 + 0.35 * cos(t * 0.23));
+        const bx = cols * (0.5 + 0.4 * cos(t * 0.17));
+        const by = h * (0.5 + 0.4 * sin(t * 0.29));
+        let out = "";
+        for (let y = 0; y < rows; y++) {
+          const py = y * aspect;
+          for (let x = 0; x < cols; x++) {
+            let sx = x;
+            let sy = py;
+            if (pull > 0.01) {
+              const dx = x - mx,
+                dy = py - my;
+              const a = pull * 1.2 * Math.exp(-(dx * dx + dy * dy) / 900);
+              sx = mx + dx * cos(a) - dy * sin(a);
+              sy = my + dx * sin(a) + dy * cos(a);
+            }
+            const v =
+              sin(sx * 0.045 + t) +
+              sin(sy * 0.035 - t * 0.8) +
+              sin(sx * 0.03 + sy * 0.025 + t * 0.6) +
+              sin(hypot(sx - ax, sy - ay) * 0.06 - t * 1.1) +
+              sin(hypot(sx - bx, sy - by) * 0.045 + t * 0.7);
+            const n = 0.5 + 0.5 * sin(v * 1.6);
+            const d = hypot(x / fadeX, y / fadeY) + (n - 0.5) * 0.5;
+            out += ramp[min(ramp.length - 1, (n * smoothstep(1.45, 2.6, d) * ramp.length) | 0)];
+          }
+          out += "\n";
+        }
+        el.textContent = out;
+      }
+
+      function tick(now) {
+        frame = requestAnimationFrame(tick);
+        if (now - last < 50) return;
+        last = now;
+        cursor.x = lerp(cursor.x, cursor.tx / cw, 0.1);
+        cursor.y = lerp(cursor.y, (cursor.ty / ch) * aspect, 0.1);
+        cursor.pull = lerp(cursor.pull, now - cursor.moved < 1500 ? 1 : 0, 0.03);
+        render(Date.now() / 8000);
+      }
+
+      function start() {
+        cancelAnimationFrame(frame);
+        const probe = document.createElement("span");
+        probe.textContent = "x".repeat(100);
+        el.append(probe);
+        const rect = probe.getBoundingClientRect();
+        probe.remove();
+        cw = rect.width / 100;
+        ch = rect.height;
+        const box = main.getBoundingClientRect();
+        aspect = ch / cw;
+        cols = Math.ceil(innerWidth / cw) + 1;
+        rows = Math.ceil(innerHeight / ch) + 1;
+        fadeX = max(1, box.right / cw);
+        fadeY = max(1, box.bottom / ch);
+        frame = requestAnimationFrame(tick);
+      }
+
+      addEventListener("resize", start);
+      document.fonts.ready.then(start);
+    </script>
   </body>
 </html>
