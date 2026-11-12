@@ -78,9 +78,16 @@
         text-decoration-style: solid;
       }
 
+      @media (height >= 420px) {
+        html {
+          overflow: hidden;
+          overscroll-behavior: none;
+        }
+      }
+
       @media (width < 640px) {
         body {
-          padding: 20px;
+          padding: 16px;
         }
 
         #plasma {
@@ -101,7 +108,7 @@
         Previously built apps and websites for Verizon, ESPN, and others at
         <a href="https://www.epandco.com" target="_blank" rel="noopener">EP+Co</a>.
       </p>
-      <p>Say hello at <a href="mailto:luke@lukecjohnson.com">luke@lukecjohnson.com</a>.</p>
+      <p>Say hello at <a href="#">luke@lukecjohnson.com</a>.</p>
     </main>
     <script type="module">
       const { sin, cos, hypot, min, max } = Math;
